@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  cpp-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_NAME=my_database
+    networks:
+      - cpp-mysql-network
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: my_database
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - cpp-mysql-network
+
+networks:
+  cpp-mysql-network:
+
+volumes:
+  mysql_data:
